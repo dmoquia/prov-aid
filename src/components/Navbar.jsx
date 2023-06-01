@@ -4,7 +4,7 @@ function Navbar() {
   return (
     <nav>
       <div className="nav-wrapper blue-grey darken-4">
-        <a href="#" className="brand-logo">
+        <a href="/" className="brand-logo">
           Parser<span className="amber accent-4">Mate</span>
         </a>
         <ul id="nav-mobile" className="right hide-on-med-and-down">
