@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 function EmailButton({ parsedData }) {
   const handleEmailClick = () => {
     const emailAddress = "recipient@example.com";
-    const subject = `COMPLETION NOTICE: ${parsedData.newCktInfo} | Address: ${parsedData.address}`;
+    const subject = `COMPLETION NOTICE: ${parsedData.newCktInfo} | Address: ${parsedData.address} | PON: ${parsedData.ponCCNA}`;
     const body = `
       Circuit has successfully been completed/activated.
       Please verify services as order can be moved to billing upon your confirmation in FSX.
