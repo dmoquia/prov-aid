@@ -202,7 +202,7 @@ function FileUpload() {
             <p>Comcast- 800-391-3000 (24/7 Customer support)</p>
           </div>
         )}
-        <EmailButton parsedData={parsedData} />
+        {parsedData && <EmailButton parsedData={parsedData} />}
       </div>
     </>
   );
