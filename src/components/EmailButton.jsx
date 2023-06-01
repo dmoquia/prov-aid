@@ -35,7 +35,19 @@ function EmailButton({ parsedData }) {
     window.location.href = mailtoUrl;
   };
 
-  return <button onClick={handleEmailClick}>Send Email</button>;
+  return (
+    <button
+      onClick={handleEmailClick}
+      style={{
+        marginTop: "1.5rem",
+        background: "teal",
+        padding: "0.5em",
+        color: "white",
+      }}
+    >
+      Send Email
+    </button>
+  );
 }
 EmailButton.propTypes = {
   parsedData: PropTypes.shape({

@@ -174,35 +174,37 @@ function FileUpload() {
   };
 
   return (
-    <div className="container">
-      <input type="file" onChange={handleFileUpload} />
-      {parsedData && (
-        <div className="choose">
-          <p>New Circuit Information: {parsedData.newCktInfo}</p>
-          <p>Address: {parsedData.address}</p>
-          <p>Circuit Provider: {parsedData.provider}</p>
-          <p>PON/CCNA: {parsedData.ponCCNA}</p>
-          <p>Circuit ID: {parsedData.circuitID}</p>
-          <p>IP Block: {parsedData.block}</p>
-          <p>IP Address Range: {parsedData.range}</p>
-          <p>First IP: {parsedData.firstIP}</p>
-          <p>Last IP: {parsedData.lastIP}</p>
-          <p>Gateway: {parsedData.gatewayIP}</p>
-          <p>Primary DNS: {parsedData.primaryDNS}</p>
-          <p>Secondary DNS: {parsedData.secondaryDNS}</p>
-          <strong>Model Details</strong>
-          <ul>
-            <li>Brand: {parsedData.manufacturer}</li>
-            <li>Model: {parsedData.models}</li>
-            <li>Mac address: {parsedData.macAddress}</li>
-          </ul>
+    <>
+      <div className="container">
+        <input type="file" onChange={handleFileUpload} />
+        {parsedData && (
+          <div className="choose">
+            <p>New Circuit Information: {parsedData.newCktInfo}</p>
+            <p>Address: {parsedData.address}</p>
+            <p>Circuit Provider: {parsedData.provider}</p>
+            <p>PON/CCNA: {parsedData.ponCCNA}</p>
+            <p>Circuit ID: {parsedData.circuitID}</p>
+            <p>IP Block: {parsedData.block}</p>
+            <p>IP Address Range: {parsedData.range}</p>
+            <p>First IP: {parsedData.firstIP}</p>
+            <p>Last IP: {parsedData.lastIP}</p>
+            <p>Gateway: {parsedData.gatewayIP}</p>
+            <p>Primary DNS: {parsedData.primaryDNS}</p>
+            <p>Secondary DNS: {parsedData.secondaryDNS}</p>
+            <strong>Model Details</strong>
+            <ul>
+              <li>Brand: {parsedData.manufacturer}</li>
+              <li>Model: {parsedData.models}</li>
+              <li>Mac address: {parsedData.macAddress}</li>
+            </ul>
 
-          <p>Circuit Prov: </p>
-          <p>Comcast- 800-391-3000 (24/7 Customer support)</p>
-          <EmailButton parsedData={parsedData} />
-        </div>
-      )}
-    </div>
+            <p>Circuit Prov: </p>
+            <p>Comcast- 800-391-3000 (24/7 Customer support)</p>
+          </div>
+        )}
+        <EmailButton parsedData={parsedData} />
+      </div>
+    </>
   );
 }
 
