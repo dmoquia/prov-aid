@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-function EmailButton({ parsedData }) {
+function EmailButton({ parsedData, parseProduct }) {
   const handleEmailClick = () => {
     const emailAddress = "recipient@example.com";
     const subject = `COMPLETION NOTICE: ${parsedData.newCktInfo} | Address: ${parsedData.address} | PON: ${parsedData.ponCCNA}`;
@@ -9,22 +9,24 @@ function EmailButton({ parsedData }) {
       See below specifications:
       New Circuit Information: ${parsedData.newCktInfo}
       Address: ${parsedData.address}
-      Circuit Provider: ${parsedData.provider}
-      PON/CCNA: ${parsedData.ponCCNA}
-      Circuit ID: ${parsedData.circuitID}
-      IP Block: ${parsedData.block}
-      IP Address Range: ${parsedData.range}
-      First IP: ${parsedData.firstIP}
-      Last IP: ${parsedData.lastIP}
-      Gateway: ${parsedData.gatewayIP}
-      Primary DNS: ${parsedData.primaryDNS}
-      Secondary DNS: ${parsedData.secondaryDNS}
+      - Circuit Provider: ${parsedData.provider}
+      - PON/CCNA: ${parsedData.ponCCNA}
+      - Circuit ID: ${parsedData.circuitID}
+      - Bandwidth: ${parseProduct.bandwidth}
+      - Demarc: ${parseProduct.demarc}
+      - IP Block: ${parsedData.block}
+      - IP Address Range: ${parsedData.range}
+      - First IP: ${parsedData.firstIP}
+      - Last IP: ${parsedData.lastIP}
+      - Gateway: ${parsedData.gatewayIP}
+      - Primary DNS: ${parsedData.primaryDNS}
+      - Secondary DNS: ${parsedData.secondaryDNS}
       Model Details:
       - Brand: ${parsedData.manufacturer}
       - Model: ${parsedData.models}
       - Mac address: ${parsedData.macAddress}
 
-      Circuit Prov:
+      Circuit Prov: ${parseProduct.prov.join(" ")}
       Comcast- 800-391-3000 (24/7 Customer support)
     `;
 
@@ -67,5 +69,10 @@ EmailButton.propTypes = {
     models: PropTypes.string.isRequired,
     macAddress: PropTypes.string.isRequired,
   }).isRequired,
+  parseProduct: PropTypes.shape({
+    prov: PropTypes.array.isRequired,
+    bandwidth: PropTypes.string.isRequired,
+    demarc: PropTypes.string.isRequired,
+  }),
 };
 export default EmailButton;

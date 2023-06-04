@@ -14,9 +14,17 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 89vh;
 }
-
+/* h2,
+h3 {
+  font-weight: 100;
+  font-size: 2rem;
+}
+.text-heading {
+  font-weight: 500;
+  font-size: 1.5rem;
+} */
 .choose {
   background-color: #f5f5f5;
   padding: 10px;
@@ -41,4 +49,43 @@ body {
 .choose strong {
   display: block;
   margin-top: 10px;
+}
+
+/* =================================== */
+
+.home {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.title {
+  font-size: 38px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.text-heading {
+  font-size: 22px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+ul {
+  list-style-type: disc;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+h2,
+h3 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 16px;
+  color: #444;
+  margin-bottom: 20px;
 }
