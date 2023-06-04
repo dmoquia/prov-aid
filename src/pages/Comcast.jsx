@@ -196,11 +196,30 @@ import EmailButton from "../components/EmailButton";
 function Comcast() {
   const [parsedData, setParsedData] = useState(null);
   const [parseProduct, setParseProduct] = useState(null);
-
+  const [error, setError] = useState("");
+  const [show, setShow] = useState(false);
   const handleFileSpeedUpload = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
+    // filename validation
+    const fileName = file.name.toLowerCase();
+    const allowedNames = ["req"];
 
+    // Check if the file name contains either "complete" or "configure"
+    const isValidFile = allowedNames.some((name) => fileName.includes(name));
+
+    if (!isValidFile) {
+      // Handle the case when the uploaded file name is not valid
+      setError(
+        "Invalid file name. Please upload a file with 'req' in its name."
+      );
+      setTimeout(() => {
+        setShow(true);
+      }, 2000);
+      return;
+    }
+
+    // end of filename validation
     reader.onload = (e) => {
       const jsonData = JSON.parse(e.target.result);
       const extractedProduct = extractProduct(jsonData);
@@ -253,7 +272,25 @@ function Comcast() {
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
+    // filename validation
+    const fileName = file.name.toLowerCase();
+    const allowedNames = ["complete", "configure"];
 
+    // Check if the file name contains either "complete" or "configure"
+    const isValidFile = allowedNames.some((name) => fileName.includes(name));
+
+    if (!isValidFile) {
+      // Handle the case when the uploaded file name is not valid
+      setError(
+        "Invalid file name. Please upload a file with 'complete' or 'configure' in its name."
+      );
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
+      return;
+    }
+
+    // end of filename validation
     reader.onload = (e) => {
       const jsonData = JSON.parse(e.target.result);
       const extractedData = extractData(jsonData);
@@ -298,7 +335,10 @@ function Comcast() {
         (field) => field.fieldName === "DEVICE_MAC_ADDRESS"
       );
     }
-
+    // Billing Account/Circuit id
+    const cktID = jsonData.response[0].sections[0].fields.find(
+      (field) => field.fieldName === "Billing_Account_Number"
+    );
     // IP BLOCK
     const ipBlock = baseKey?.subSections
       .find((section) => section.sectionName === wanIpInfo)
@@ -336,9 +376,7 @@ function Comcast() {
       provider: jsonData.info.tradingPartner,
       address: jsonData.info.endUserAddress,
       ponCCNA: jsonData.info.requestNumber,
-      circuitID: jsonData.response[0].sections[0].fields.find(
-        (field) => field.fieldName === "Billing_Account_Number"
-      )?.value,
+      circuitID: cktID ? cktID.value : unavailable || null,
       block: ipBlock ? ipBlock.value : unavailable || null,
       gatewayIP: gateway ? gateway.value : unavailable || null,
       primaryDNS: dns1 ? dns1.value : unavailable || null,
@@ -357,7 +395,9 @@ function Comcast() {
   };
   return (
     <>
+      <h1 className="carrier">Comcast Broadband</h1>
       <div className="container">
+        {error && !show && <div className="error">{error}</div>}
         <input id="fileInput" type="file" onChange={handleFileUpload} />
 
         {parsedData && (

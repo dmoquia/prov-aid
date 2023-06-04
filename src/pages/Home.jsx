@@ -151,7 +151,7 @@ function Home() {
             1. Download the JSON file (FULLJSON) in UOC. And Extract the file.
           </li>
           <li>
-            2. Please select the carrier you want to create a template for. (e.g
+            2. Select the carrier you want to create a template for. (e.g
             Comcast)
           </li>
           <li>3. Upload two files: "complete" or "configure" and "req".</li>
