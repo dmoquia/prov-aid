@@ -196,7 +196,7 @@ import EmailButton from "../components/EmailButton";
 function Comcast() {
   const [parsedData, setParsedData] = useState(null);
   const [parseProduct, setParseProduct] = useState(null);
-  console.log(parseProduct ? typeof parseProduct.prov : null);
+
   const handleFileSpeedUpload = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -282,8 +282,6 @@ function Comcast() {
       (section) => section.sectionName === serviceConfig
     );
 
-    console.log(jsonData.response[0].sections);
-
     if (
       jsonData.response[0].sections[2]?.subSections?.[4] &&
       jsonData.response[0].sections[2].subSections[0]
@@ -314,7 +312,7 @@ function Comcast() {
     // IP RANGE
     const ipRange = baseKey?.subSections
       .find((section) => section.sectionName === lanIpInfo)
-      ?.fields.find((field) => field.fieldName === ipAddress);
+      ?.fields.find((field) => field.fieldName === ipAddress).value;
 
     const rangeParts = ipRange ? ipRange.split(" - ") : [];
     const firstUsable = rangeParts[0] || null;
@@ -345,9 +343,9 @@ function Comcast() {
       gatewayIP: gateway ? gateway.value : unavailable || null,
       primaryDNS: dns1 ? dns1.value : unavailable || null,
       secondaryDNS: dns2 ? dns2.value : unavailable || null,
-      range: ipRange ? ipRange.value : unavailable || null,
-      firstIP: firstUsable ? firstUsable.value : unavailable || null,
-      lastIP: lastUsable ? lastUsable.value : unavailable || null,
+      range: ipRange ? ipRange : unavailable || null,
+      firstIP: firstUsable ? firstUsable : unavailable || null,
+      lastIP: lastUsable ? lastUsable : unavailable || null,
       manufacturer:
         manufacturer !== undefined ? manufacturer.value : unavailable || null,
       models: model !== undefined ? model.value : unavailable || null,
