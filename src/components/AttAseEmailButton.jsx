@@ -1,27 +1,8 @@
 import PropTypes from "prop-types";
-function EmailButton({ parsedData, parseProduct }) {
+function AseEmailButton({ parsedData, parseProduct }) {
   const handleEmailClick = () => {
-    let ccsupport = "";
-    const provider = parsedData.provider.toLowerCase();
+    let ccsupport = "PLUG AND PLAY –ATT ASE – 855-822-0263, option 3, option 1";
 
-    const supportInfo = {
-      comcast: "Comcast- 800-391-3000 (24/7 Customer support)",
-      spectrum:
-        "PLUG AND PLAY –-Spectrum Activation Support - 866-785-5681(E-Access On_Net Ckts)",
-      "at&t(apex)": "PLUG AND PLAY -AT&T- 844-963-0016 (Activation/Support)",
-    };
-
-    ccsupport = supportInfo[provider] || "";
-
-    // let ccsupport = "";
-    // if (parsedData.provider.toLowerCase() === "comcast") {
-    //   ccsupport = "Comcast- 800-391-3000 (24/7 Customer support)";
-    // } else if (parsedData.provider.toLowerCase() === "spectrum") {
-    //   ccsupport =
-    //     "PLUG AND PLAY –-Spectrum Activation Support - 866-785-5681(E-Access On_Net Ckts)";
-    // } else if (parsedData.provider.toLowerCase() === "at&t(apex)") {
-    //   ccsupport = "PLUG AND PLAY -AT&T- 844-963-0016 (Activation/Support)";
-    // }
     const emailAddress = "recipient@example.com";
     const subject = `COMPLETION NOTICE: ${parsedData.newCktInfo} | Address: ${parsedData.address} | PON: ${parsedData.ponCCNA}`;
     const body = `
@@ -30,25 +11,27 @@ function EmailButton({ parsedData, parseProduct }) {
       See below specifications:
       New Circuit Information: ${parsedData.newCktInfo}
       Address: ${parsedData.address}
+      Ready Date ${parsedData.readyDate}
       - Circuit Provider: ${parsedData.provider}
+      - UNI PON: ${parsedData.uniPon}
+      - UNI EVC: ${parsedData.evcPon}
       - PON/CCNA: ${parsedData.ponCCNA}
-      - Circuit ID: ${parsedData.circuitID}
-      - Bandwidth: ${parseProduct.bandwidth}
+      - ICSC: ${parsedData.icsc}
+      - UNI Order: ${parsedData.uniOrder}
+      - EVC Order: ${parsedData.evcOrder}
+      - UNI ASR: ${parsedData.uniASR}
+      - EVC ASR: ${parsedData.evcASR}
+      - UNI CircuitID: ${parsedData.uniCircuitId}
+      - EVC CircuitID: ${parsedData.evcCircuitId}
+      - Configuration(uBAN): ${parsedData.ConfigBAN}
+      - Handoff for LEC: ${parsedData.handoffLEC}
+      - HUB: ${parsedData.hub}
+      - Bandwidth: default
       - Demarc: ${parseProduct.demarc}
-      - IP Block: ${parsedData.block}
-      - IP Address Range: ${parsedData.range}
-      - First IP: ${parsedData.firstIP}
-      - Last IP: ${parsedData.lastIP}
-      - Gateway: ${parsedData.gatewayIP}
-      - Primary DNS: ${parsedData.primaryDNS}
-      - Secondary DNS: ${parsedData.secondaryDNS}
-      Model Details:
-      - Brand: ${parsedData.manufacturer}
-      - Model: ${parsedData.models}
-      - Mac address: ${parsedData.macAddress}
-
+      - CFA: ${parseProduct.cfa}
+      - VLAN: ${parseProduct.vlans}
+      - IP Details & Ping will go here
       Circuit Prov: ${parseProduct.prov.join(" ")}
-
       ${ccsupport}
     `;
 
@@ -73,10 +56,25 @@ function EmailButton({ parsedData, parseProduct }) {
     </button>
   );
 }
-EmailButton.propTypes = {
+AseEmailButton.propTypes = {
   parsedData: PropTypes.shape({
     newCktInfo: PropTypes.string.isRequired,
     address: PropTypes.string.isRequired,
+    readyDate: PropTypes.string.isRequired,
+    uniPon: PropTypes.string.isRequired,
+    evcPon: PropTypes.string.isRequired,
+    icsc: PropTypes.string.isRequired,
+    uniOrder: PropTypes.string.isRequired,
+    evcOrder: PropTypes.string.isRequired,
+    uniASR: PropTypes.string.isRequired,
+    evcASR: PropTypes.string.isRequired,
+    uniCircuitId: PropTypes.string.isRequired,
+    evcCircuitId: PropTypes.string.isRequired,
+    ConfigBAN: PropTypes.string.isRequired,
+    handoffLEC: PropTypes.string.isRequired,
+    hub: PropTypes.string.isRequired,
+
+    // old
     provider: PropTypes.string.isRequired,
     ponCCNA: PropTypes.string.isRequired,
     circuitID: PropTypes.string.isRequired,
@@ -92,9 +90,11 @@ EmailButton.propTypes = {
     macAddress: PropTypes.string.isRequired,
   }).isRequired,
   parseProduct: PropTypes.shape({
+    cfa: PropTypes.string.isRequired,
+    vlans: PropTypes.string.isRequired,
     prov: PropTypes.array.isRequired,
     bandwidth: PropTypes.string.isRequired,
     demarc: PropTypes.string.isRequired,
   }),
 };
-export default EmailButton;
+export default AseEmailButton;

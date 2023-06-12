@@ -1,35 +1,66 @@
 import { Link } from "react-router-dom";
-
+import { useEffect, useRef } from "react";
+import M from "materialize-css";
 function Navbar() {
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    // Initialize dropdown on component mount
+    M.Dropdown.init(dropdownRef.current);
+  }, []);
+
   return (
-    <nav>
-      <div className="nav-wrapper blue-grey darken-4">
-        <a href="/" className="brand-logo">
-          Parser
-          <span
-            className="amber accent-4"
-            style={{
-              color: "black",
-              borderRadius: "0.3rem",
-              padding: "0 0.2rem",
-            }}
-          >
-            Mate
-          </span>
-        </a>
-        <ul id="nav-mobile" className="right hide-on-med-and-down">
-          <li>
-            <Link to="/comcast">Comcast</Link>
-          </li>
-          <li>
-            <Link to="/att">AT&T</Link>
-          </li>
-          <li>
-            <Link to="/spectrum">Spectrum</Link>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <>
+      {/* Dropdown Structure  */}
+      <ul id="dropdown1" className="dropdown-content">
+        <li>
+          <Link to="/att">BB</Link>
+        </li>
+        <li>
+          <Link to="/attase">ASE</Link>
+        </li>
+        <li className="divider"></li>
+        <li>
+          <Link to="/attdia">DIA</Link>
+        </li>
+      </ul>
+      <nav>
+        <div className="nav-wrapper blue-grey darken-4">
+          <a href="/" className="brand-logo">
+            Parser
+            <span
+              className="amber accent-4"
+              style={{
+                color: "black",
+                borderRadius: "0.3rem",
+                padding: "0 0.2rem",
+              }}
+            >
+              Mate
+            </span>
+          </a>
+          <ul className="right hide-on-med-and-down">
+            <li>
+              <Link to="/comcast">Comcast</Link>
+            </li>
+            <li>
+              <Link to="/spectrum">Spectrum</Link>
+            </li>
+            {/* Dropdown Trigger  */}
+            <li>
+              <a
+                className="dropdown-trigger"
+                href="#!"
+                data-target="dropdown1"
+                ref={dropdownRef}
+              >
+                ATT<i className="material-icons right">arrow_drop_down</i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </>
   );
 }
 
