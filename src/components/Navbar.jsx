@@ -24,6 +24,7 @@ function Navbar() {
           <Link to="/attdia">DIA</Link>
         </li>
       </ul>
+
       <nav>
         <div className="nav-wrapper blue-grey darken-4">
           <a href="/" className="brand-logo">
@@ -65,6 +66,92 @@ function Navbar() {
 }
 
 export default Navbar;
+// import { Link } from "react-router-dom";
+// import { useEffect, useRef } from "react";
+// import M from "materialize-css";
+
+// function Navbar() {
+//   const dropdownRef1 = useRef(null);
+//   const dropdownRef2 = useRef(null);
+
+//   useEffect(() => {
+//     // Initialize dropdowns on component mount
+//     M.Dropdown.init(dropdownRef1.current);
+//     M.Dropdown.init(dropdownRef2.current);
+//   }, []);
+
+//   return (
+//     <>
+//       {/* Dropdown Structure  */}
+//       <ul id="dropdown1" className="dropdown-content">
+//         <li>
+//           <Link to="/att">BB</Link>
+//         </li>
+//         <li>
+//           <Link to="/attase">ASE</Link>
+//         </li>
+//         <li className="divider"></li>
+//         <li>
+//           <Link to="/attdia">DIA</Link>
+//         </li>
+//       </ul>
+//       <ul id="dropdown2" className="dropdown-content">
+//         <li>
+//           <Link to="/">blank</Link>
+//         </li>
+//       </ul>
+//       <nav>
+//         <div className="nav-wrapper blue-grey darken-4">
+//           <a href="/" className="brand-logo">
+//             Parser
+//             <span
+//               className="amber accent-4"
+//               style={{
+//                 color: "black",
+//                 borderRadius: "0.3rem",
+//                 padding: "0 0.2rem",
+//               }}
+//             >
+//               Mate
+//             </span>
+//           </a>
+//           <ul className="right hide-on-med-and-down">
+//             <li>
+//               <a
+//                 className="dropdown-trigger"
+//                 href="#!"
+//                 data-target="dropdown2"
+//                 ref={dropdownRef2}
+//               >
+//                 Blank<i className="material-icons right">arrow_drop_down</i>
+//               </a>
+//             </li>
+//             <li>
+//               <Link to="/comcast">Comcast</Link>
+//             </li>
+//             <li>
+//               <Link to="/spectrum">Spectrum</Link>
+//             </li>
+//             {/* Dropdown Triggers */}
+//             <li>
+//               <a
+//                 className="dropdown-trigger"
+//                 href="#!"
+//                 data-target="dropdown1"
+//                 ref={dropdownRef1}
+//               >
+//                 ATT<i className="material-icons right">arrow_drop_down</i>
+//               </a>
+//             </li>
+//           </ul>
+//         </div>
+//       </nav>
+//     </>
+//   );
+// }
+
+// export default Navbar;
+
 // import { useState } from "react";
 // import EmailButton from "../components/EmailButton";
 

@@ -34,7 +34,7 @@ function AseEmailButton({ parsedData, parseProduct }) {
       Circuit Prov: ${parseProduct.prov.join(" ")}
       ${ccsupport}
     `;
-
+    // backend option on sending email https://chat.openai.com/c/98b5ddad-d036-4cd8-a672-f931abd8f184
     const mailtoUrl = `mailto:${emailAddress}?subject=${encodeURIComponent(
       subject
     )}&body=${encodeURIComponent(body)}`;

@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import AseEmailButton from "../components/AttAseEmailButton";
 function AttASE() {
   const [parsedData, setParsedData] = useState(null);
@@ -56,37 +55,6 @@ function AttASE() {
       demarc = comments.value.split("DMARC")[1].trim();
     }
 
-    // const speed = products.fields.find(
-    //   (field) => field.fieldName === "PRODUCT_SELECTED"
-    // );
-
-    // const billSec = jsonData.productOrder.find(
-    //   (contact) => contact.sectionName === "Billing/Contact Section"
-    // )
-
-    // const dataObjects = [
-    //   jsonData.productOrder.find(
-    //     (section) => section.sectionName === "UNI DETAIL SECTION"
-    //   ),
-    // ];
-
-    // const targetSubSectionName = "CE-VLAN SECTION";
-
-    // for (const obj of dataObjects) {
-    //   if (obj.sectionName === "UNI DETAIL SECTION") {
-    //     for (const subSection of obj.subSections) {
-    //       if (subSection.sectionName === targetSubSectionName) {
-    //         for (const field of subSection.fields) {
-    //           const fieldValue = field.value;
-    //           // Perform your desired action with each fieldValue
-    //           console.log(fieldValue);
-    //         }
-    //         break;
-    //       }
-    //     }
-    //   }
-    // }
-
     // improvement coming from this https://chat.openai.com/c/63c271e9-fafd-49b7-84c1-c995d3327f0f
 
     const data = jsonData.productOrder.filter(
@@ -96,7 +64,6 @@ function AttASE() {
     // Now you can iterate over the 'data' array to process each object
     for (const obj of data) {
       // Process each 'obj' as needed
-
       let vlan = obj.subSections
         .filter((sub) => sub.sectionName === "CE-VLAN SECTION")
         .flatMap((sub) => sub.fields)
@@ -179,19 +146,19 @@ function AttASE() {
     // let macAddress = undefined;
     // let manufacturer = undefined;
     // let model = undefined;
-    const serviceConfig = "Service Configuration";
-    const wanIpInfo = "WAN IP Information";
-    const ipblock = "IP_BLOCK";
-    const lanIpInfo = "LAN IP Information";
-    const ipAddress = "IP_ADDRESS";
-    const gatewayIp = "GATEWAY_IP";
-    const routingInfo = "Routing Information";
-    const firstDNS = "PRIMARY_DNS";
-    const secondDNS = "SECONDARY_DNS";
+    // const serviceConfig = "Service Configuration";
+    // const wanIpInfo = "WAN IP Information";
+    // const ipblock = "IP_BLOCK";
+    // const lanIpInfo = "LAN IP Information";
+    // const ipAddress = "IP_ADDRESS";
+    // const gatewayIp = "GATEWAY_IP";
+    // const routingInfo = "Routing Information";
+    // const firstDNS = "PRIMARY_DNS";
+    // const secondDNS = "SECONDARY_DNS";
+    // const baseKey = jsonData?.response[0]?.sections.find(
+    //   (section) => section.sectionName === serviceConfig
+    // );
     const unavailable = "Unavailable";
-    const baseKey = jsonData?.response[0]?.sections.find(
-      (section) => section.sectionName === serviceConfig
-    );
 
     const extractedData = {
       newCktInfo: jsonData.info.project || jsonData.info.endUser,

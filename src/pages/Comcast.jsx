@@ -125,7 +125,7 @@ function Comcast() {
     const wanIpInfo = "WAN IP Information";
     const ipblock = "IP_BLOCK";
     const lanIpInfo = "LAN IP Information";
-    const ipAddress = "IP_ADDRESS";
+    // const ipAddress = ["LAN_IP_ADDRESS_RANGE"] || ["IP_ADDRESS"];
     const gatewayIp = "GATEWAY_IP";
     const routingInfo = "Routing Information";
     const firstDNS = "PRIMARY_DNS";
@@ -180,9 +180,37 @@ function Comcast() {
       ?.fields.find((field) => field.fieldName === gatewayIp);
 
     // IP RANGE
-    const ipRange = baseKey?.subSections
-      .find((section) => section.sectionName === lanIpInfo)
-      ?.fields.find((field) => field.fieldName === ipAddress).value;
+    // let ipRange;
+
+    // const r1 = baseKey?.subSections
+    //   .find((section) => section.sectionName === lanIpInfo)
+    //   ?.fields.find((field) => field.fieldName === "IP_ADDRESS").value;
+
+    // const r2 = baseKey?.subSections
+    //   .find((section) => section.sectionName === lanIpInfo)
+    //   ?.fields.find(
+    //     (field) => field.fieldName === "LAN_IP_ADDRESS_RANGE"
+    //   ).value;
+    // if (r1) {
+    //   ipRange = r1;
+    // } else {
+    //   ipRange = r2;
+    // }
+    // improvement found here https://chat.openai.com/c/acf2f08d-f87d-4829-9708-26fcab6e6d2f
+    let ipRange;
+    const section = baseKey?.subSections.find(
+      (section) => section.sectionName === lanIpInfo
+    );
+
+    if (section) {
+      const r1 = section.fields.find(
+        (field) => field.fieldName === "IP_ADDRESS"
+      )?.value;
+      const r2 = section.fields.find(
+        (field) => field.fieldName === "LAN_IP_ADDRESS_RANGE"
+      )?.value;
+      ipRange = r1 || r2;
+    }
 
     const rangeParts = ipRange ? ipRange.split(" - ") : [];
     const firstUsable = rangeParts[0] || null;

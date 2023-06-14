@@ -46,7 +46,7 @@ function EmailButton({ parsedData, parseProduct }) {
       - Brand: ${parsedData.manufacturer}
       - Model: ${parsedData.models}
       - Mac address: ${parsedData.macAddress}
-
+      - Ping test will go here
       Circuit Prov: ${parseProduct.prov.join(" ")}
 
       ${ccsupport}
