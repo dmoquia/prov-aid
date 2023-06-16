@@ -125,7 +125,6 @@ function Comcast() {
     const wanIpInfo = "WAN IP Information";
     const ipblock = "IP_BLOCK";
     const lanIpInfo = "LAN IP Information";
-    // const ipAddress = ["LAN_IP_ADDRESS_RANGE"] || ["IP_ADDRESS"];
     const gatewayIp = "GATEWAY_IP";
     const routingInfo = "Routing Information";
     const firstDNS = "PRIMARY_DNS";

@@ -35,16 +35,55 @@ function AttASE() {
 
     reader.readAsText(file);
   };
-
   const extractProduct = (jsonData) => {
+    // // const ruid = jsonData.productOrder
+    // //   .find((section) => section.sectionName === "UNI DETAIL SECTION")
+    // //   .fields.find((field) => field.fieldName === "RUID");
+
+    // const ruid = jsonData.productOrder
+    //   .filter((section) => section.sectionName === "UNI DETAIL SECTION")
+    //   .fields.find(
+    //     (field) => field.fieldName === "RUID" && field.value !== matchRuid
+    //   );
+    // console.log(ruid);
+
+    // const matchRuid = parsedData.uniCircuitId;
+
+    // const ruid = jsonData.productOrder
+    //   .filter((section) => section.sectionName === "UNI DETAIL SECTION")
+    //   .flatMap((section) => section.fields)
+    //   .filter(
+    //     (field) => field.fieldName === "RUID" && field.value !== matchRuid
+    //   )
+    //   .map((field) => field.value);
+
+    // console.log(ruid);
+
+    // ***to get the circuit id***
+    // solution can be found here https://chat.openai.com/c/afcb41da-7a00-4ab6-a1c5-8f97443492ae
+    const matchRuid = parsedData.uniCircuitId;
     const ruid = jsonData.productOrder
-      .find((section) => section.sectionName === "UNI DETAIL SECTION")
-      .fields.find((field) => field.fieldName === "RUID");
+      .flatMap((section) => section.fields)
+      .find((field) => field.fieldName === "RUID" && field.value !== matchRuid);
+
+    const fieldValue = ruid ? ruid.value : "Unavailable" || null;
+
+    // get the demarcs from the comments
     const comments = jsonData.productOrder
       ?.find((item) =>
         ["ASR ADMINISTRATIVE SECTION"].includes(item.sectionName)
       )
       .fields?.find((field) => field.fieldName === "REMARKS");
+
+    //  get the bandwith from the comments. solution came from https://chat.openai.com/c/2c71cda4-74bb-4195-bc38-d55a56581e2f
+
+    let bwd = null;
+    if (comments) {
+      const parts = comments.value.split("\n");
+      if (parts.length > 0) {
+        bwd = parts[0].trim();
+      }
+    }
 
     let demarc;
     if (comments.value.includes("DEMARC:")) {
@@ -90,9 +129,9 @@ function AttASE() {
     const provisioner = [name.value, contactNum.value, email.value];
 
     const extractedProduct = {
-      cfa: ruid ? ruid.value : "Unavailable" || null,
+      cfa: fieldValue,
       vlans: result ? result.value : "Unavailable" || null,
-      // bandwidth: speed ? speed.value : null,
+      bandwidth: bwd ? bwd : "Unavailable" || null,
       demarc: demarc ? demarc : "unavailable" || null,
       prov: provisioner,
     };
@@ -138,7 +177,7 @@ function AttASE() {
   };
 
   const extractData = (jsonData) => {
-    // Modem details
+    console.log(jsonData);
 
     const asr = jsonData.response[0].sections
       .find((section) => section.sectionName === "Administration Section")
@@ -158,22 +197,43 @@ function AttASE() {
     // const baseKey = jsonData?.response[0]?.sections.find(
     //   (section) => section.sectionName === serviceConfig
     // );
+
     const unavailable = "Unavailable";
+    // let uniOrd = jsonData.info.sellerOrderNumber;
+    // if (!uniOrd || typeof uniOrd !== "string") {
+    //   // Handle the case when uniOrder is not a string or is undefined/null
+    //   uniOrd = ""; // Set a default value or handle the error condition as needed
+    // }
+    // let uniCkt = jsonData.info.sellerCircuitIDs;
+    // if (!uniCkt || typeof uniCkt !== "string") {
+    //   // Handle the case when uniOrder is not a string or is undefined/null
+    //   uniCkt = ""; // Set a default value or handle the error condition as needed
+    // }
+
+    function validateStringProperty(value) {
+      // improvement found on https://chat.openai.com/c/2c71cda4-74bb-4195-bc38-d55a56581e2f
+      return typeof value === "string" ? value : value.join(", ");
+    }
 
     const extractedData = {
+      carrier: jsonData.info.tradingPartner,
+      requestNumber: jsonData.info.requestNumber,
       newCktInfo: jsonData.info.project || jsonData.info.endUser,
       address: jsonData.info.endUserAddress,
       readyDate: jsonData.info.tpCompletionDate,
       provider: jsonData.info.productCatalogName,
-      uniPon: jsonData.info.relatedPurchaseOrderNumber,
+      uniPon:
+        jsonData.info.relatedPurchaseOrderNumber ||
+        jsonData.info.requestNumber ||
+        unavailable,
       evcPon: jsonData.info.requestNumber,
       ponCCNA: jsonData.info.buyerID,
       icsc: jsonData.info.sellerID,
-      uniOrder: jsonData.info.sellerOrderNumber,
+      uniOrder: validateStringProperty(jsonData.info.sellerOrderNumber),
       evcOrder: jsonData.info.sellerVirtualOrderNumber,
       uniASR: asr ? asr.value : unavailable || null,
       evcASR: jsonData.info.sellerOrderID,
-      uniCircuitId: jsonData.info.sellerCircuitIDs,
+      uniCircuitId: validateStringProperty(jsonData.info.sellerCircuitIDs),
       evcCircuitId: "default",
       ConfigBAN: "default",
       handoffLEC: "default",
@@ -217,7 +277,7 @@ function AttASE() {
 
           {parseProduct && (
             <div>
-              <p>Bandwidth: default</p>
+              <p>Bandwidth: {parseProduct.bandwidth}</p>
               <p>Demarc: {parseProduct.demarc}</p>
 
               <p>CFA: {parseProduct.cfa}</p>

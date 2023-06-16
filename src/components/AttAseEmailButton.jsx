@@ -1,10 +1,32 @@
 import PropTypes from "prop-types";
 function AseEmailButton({ parsedData, parseProduct }) {
   const handleEmailClick = () => {
-    let ccsupport = "PLUG AND PLAY –ATT ASE – 855-822-0263, option 3, option 1";
+    // let ccsupport = "PLUG AND PLAY –ATT ASE – 855-822-0263, option 3, option 1";
+
+    // let ccsupport = "";
+    // const provider = parsedData.carrier.toLowerCase();
+
+    // const supportInfo = {
+    //   comcast: "Comcast- 800-391-3000 (24/7 Customer support)",
+    //   spectrum:
+    //     "PLUG AND PLAY –-Spectrum Activation Support - 866-785-5681(E-Access On_Net Ckts)",
+    //   "at&t(apex)": "PLUG AND PLAY –ATT ASE – 855-822-0263, option 3, option 1",
+    // };
+
+    // ccsupport = supportInfo[provider] || "";
+
+    let ccsupport = "";
+    if (parsedData.carrier.toLowerCase() === "comcast") {
+      ccsupport = "Comcast- 800-391-3000 (24/7 Customer support)";
+    } else if (parsedData.carrier.toLowerCase() === "spectrum") {
+      ccsupport =
+        "PLUG AND PLAY –-Spectrum Activation Support - 866-785-5681(E-Access On_Net Ckts)";
+    } else if (parsedData.carrier.toLowerCase() === "at&t") {
+      ccsupport = "PLUG AND PLAY –ATT ASE – 855-822-0263, option 3, option 1";
+    }
 
     const emailAddress = "recipient@example.com";
-    const subject = `COMPLETION NOTICE: ${parsedData.newCktInfo} | Address: ${parsedData.address} | PON: ${parsedData.ponCCNA}`;
+    const subject = `COMPLETION NOTICE: ${parsedData.newCktInfo} | Address: ${parsedData.address} | PON: ${parsedData.requestNumber}`;
     const body = `
       Circuit has successfully been completed/activated.
       Please verify services as order can be moved to billing upon your confirmation in FSX.
@@ -26,7 +48,7 @@ function AseEmailButton({ parsedData, parseProduct }) {
       - Configuration(uBAN): ${parsedData.ConfigBAN}
       - Handoff for LEC: ${parsedData.handoffLEC}
       - HUB: ${parsedData.hub}
-      - Bandwidth: default
+      - Bandwidth: ${parseProduct.bandwidth}
       - Demarc: ${parseProduct.demarc}
       - CFA: ${parseProduct.cfa}
       - VLAN: ${parseProduct.vlans}
@@ -58,6 +80,8 @@ function AseEmailButton({ parsedData, parseProduct }) {
 }
 AseEmailButton.propTypes = {
   parsedData: PropTypes.shape({
+    carrier: PropTypes.string.isRequired,
+    requestNumber: PropTypes.string.isRequired,
     newCktInfo: PropTypes.string.isRequired,
     address: PropTypes.string.isRequired,
     readyDate: PropTypes.string.isRequired,
@@ -77,17 +101,17 @@ AseEmailButton.propTypes = {
     // old
     provider: PropTypes.string.isRequired,
     ponCCNA: PropTypes.string.isRequired,
-    circuitID: PropTypes.string.isRequired,
-    block: PropTypes.string.isRequired,
-    range: PropTypes.string.isRequired,
-    firstIP: PropTypes.string.isRequired,
-    lastIP: PropTypes.string.isRequired,
-    gatewayIP: PropTypes.string.isRequired,
-    primaryDNS: PropTypes.string.isRequired,
-    secondaryDNS: PropTypes.string.isRequired,
-    manufacturer: PropTypes.string.isRequired,
-    models: PropTypes.string.isRequired,
-    macAddress: PropTypes.string.isRequired,
+    // circuitID: PropTypes.string.isRequired,
+    // block: PropTypes.string.isRequired,
+    // range: PropTypes.string.isRequired,
+    // firstIP: PropTypes.string.isRequired,
+    // lastIP: PropTypes.string.isRequired,
+    // gatewayIP: PropTypes.string.isRequired,
+    // primaryDNS: PropTypes.string.isRequired,
+    // secondaryDNS: PropTypes.string.isRequired,
+    // manufacturer: PropTypes.string.isRequired,
+    // models: PropTypes.string.isRequired,
+    // macAddress: PropTypes.string.isRequired,
   }).isRequired,
   parseProduct: PropTypes.shape({
     cfa: PropTypes.string.isRequired,

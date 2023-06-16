@@ -38,16 +38,13 @@ function Spectrum() {
   };
 
   const extractProduct = (jsonData) => {
-    console.log(jsonData.productOrder);
     const products = jsonData.productOrder.find((product) =>
       // product.sectionName === "Product Service Request"
       ["PRODUCT SERVICE REQUEST", "Product Service Request"]?.includes(
         product.sectionName
       )
     );
-    console.log(
-      jsonData.productOrder.find((item) => console.log(item.sectionName))
-    );
+
     // const comments = products.fields.find(
     //   (field) => field.fieldName === "LOCATION_COMMENTS"
     // );
