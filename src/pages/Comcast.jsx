@@ -46,7 +46,16 @@ function Comcast() {
       (field) => field.fieldName === "LOCATION_COMMENTS"
     );
 
-    const demarc = comments ? comments.value.split("DEMARC: ")[1] : "";
+    // const demarc = comments ? comments.value.split("DEMARC: ")[1] : "";
+    let demarc;
+    const keywords = ["DEMARC:", "DEMARC", "DMARC"];
+    for (const keyword of keywords) {
+      const index = comments.value.indexOf(keyword);
+      if (index !== -1) {
+        demarc = comments.value.substring(index + keyword.length).trim();
+        break;
+      }
+    }
 
     const speed = products.fields.find(
       (field) => field.fieldName === "PRODUCT_SELECTED"
@@ -151,17 +160,62 @@ function Comcast() {
     //   );
     // }
 
-    const cpe = jsonData.response[0].sections[2]?.subSections.find(
+    // let cpe;
+    // const cpe1 = jsonData.response[0].sections[2]?.subSections.find(
+    //   (item) => item.sectionName === "CPE Information"
+    // );
+    // const cpe2 = jsonData.response[0]?.sections
+    //   .find((section) => section?.sectionName === "Service Configuration")
+    //   .subSections?.find((sub) => sub.sectionName === "CPE Information");
+
+    // if (cpe1 || cpe2) {
+    //   cpe = cpe1 || cpe2;
+    // }
+    // let field = jsonData?.response[0]?.sections
+    //   ?.find((section) => section.sectionName === "Service Configuration")
+    //   ?.subSections?.find(
+    //     (section) => section.sectionName === "Network Information"
+    //   )
+    //   ?.fields?.find((field) => field.fieldName === "DEVICE_MAC_ADDRESS");
+
+    // if (cpe) {
+    //   manufacturer = cpe.fields.find(
+    //     (field) => field.fieldName === "MANUFACTURER"
+    //   );
+    //   model = cpe.fields.find((field) => field.fieldName === "MODEL");
+    //   // macAddress = jsonData.response[0].sections[2].subSections
+    //   //   .find((item) => item.sectionName === "Network Information")
+    //   //   .fields.find((field) => field.fieldName === "DEVICE_MAC_ADDRESS");
+    //   macAddress = field;
+    // }
+
+    // improvement found on https://chat.openai.com/c/84ec5ae7-d1fe-459f-8cd1-a4b9e52d2c6f
+    const { sections } = jsonData.response[0];
+    const opt1 = sections[2]?.subSections.find(
       (item) => item.sectionName === "CPE Information"
     );
+    const opt2 = sections
+      .find((section) => section?.sectionName === "Service Configuration")
+      ?.subSections.find((sub) => sub.sectionName === "CPE Information");
+
+    const cpe = opt1 || opt2;
+
+    const networkSection = sections
+      .find((section) => section.sectionName === "Service Configuration")
+      ?.subSections.find(
+        (section) => section.sectionName === "Network Information"
+      );
+
+    const field = networkSection?.fields.find(
+      (field) => field.fieldName === "DEVICE_MAC_ADDRESS"
+    );
+
     if (cpe) {
       manufacturer = cpe.fields.find(
         (field) => field.fieldName === "MANUFACTURER"
       );
       model = cpe.fields.find((field) => field.fieldName === "MODEL");
-      macAddress = jsonData.response[0].sections[2].subSections
-        .find((item) => item.sectionName === "Network Information")
-        .fields.find((field) => field.fieldName === "DEVICE_MAC_ADDRESS");
+      macAddress = field;
     }
 
     // Billing Account/Circuit id
@@ -211,7 +265,15 @@ function Comcast() {
       ipRange = r1 || r2;
     }
 
-    const rangeParts = ipRange ? ipRange.split(" - ") : [];
+    // const rangeParts = ipRange ? ipRange.split(" - ").split(" TO ") : [];
+    // const rangeParts = ipRange ? ipRange.split(" - ").split(" TO ") : [];
+    // improvement https://chat.openai.com/c/84ec5ae7-d1fe-459f-8cd1-a4b9e52d2c6f
+    const rangeParts = ipRange
+      ? ipRange.includes(" - ")
+        ? ipRange.split(" - ")
+        : ipRange.split(" TO ")
+      : [];
+
     const firstUsable = rangeParts[0] || null;
     const lastUsable = rangeParts[1] || null;
 

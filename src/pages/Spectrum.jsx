@@ -57,11 +57,7 @@ function Spectrum() {
       .fields.find((field) => field.fieldName === "LOCATION_COMMENTS");
     // const demarc = comments ? comments.value.split("DEMARC: ")[1] : "";
     // const demarc = comments.value.split("DEMARC")[1].trim();
-    // console.log(
-    //   jsonData.productOrder
-    //     .find((item) => item.sectionName === "PRODUCT SERVICE REQUEST")
-    //     .fields.find((field) => field.fieldName === "LOCATION_COMMENTS")
-    // );
+
     let demarc;
     if (comments.value.includes("DEMARC:")) {
       demarc = comments.value.split("DEMARC:")[1].trim();
@@ -70,6 +66,11 @@ function Spectrum() {
     } else if (comments.value.includes("DMARC")) {
       demarc = comments.value.split("DMARC")[1].trim();
     }
+
+    const regex = /(\d+(?:MB|GB|m))/i;
+    const match = comments.value.match(regex);
+    const speeds = match ? match[0] : null;
+    console.log(speeds);
 
     const speed = products.fields.find(
       (field) => field.fieldName === "PRODUCT_SELECTED"
@@ -93,7 +94,8 @@ function Spectrum() {
     const provisioner = [name.value, contactNum.value, email.value];
 
     const extractedProduct = {
-      bandwidth: speed ? speed.value : null,
+      // bandwidth: speed ? speed.value : null,
+      bandwidth: `BUSINESS CABLE ${speeds}` || speed.value || null,
       demarc: demarc ? demarc : "unavailable" || null,
       prov: provisioner,
     };
@@ -148,7 +150,7 @@ function Spectrum() {
     const wanIpInfo = "WAN IP Information";
     const ipblock = "IP_BLOCK";
     const lanIpInfo = "LAN IP Information";
-    const ipAddress = "IP_ADDRESS";
+    // const ipAddress = "IP_ADDRESS";
     const gatewayIp = "GATEWAY_IP";
     const routingInfo = "Routing Information";
     const firstDNS = "PRIMARY_DNS";
@@ -158,22 +160,52 @@ function Spectrum() {
       (section) => section.sectionName === serviceConfig
     );
 
-    if (
-      jsonData.response[0].sections[2]?.subSections?.[4] &&
-      jsonData.response[0].sections[2].subSections[0]
-    ) {
-      // Code to execute when manufacturer is found
-      manufacturer =
-        jsonData.response[0].sections[2]?.subSections?.[4]?.fields.find(
-          (field) => field.fieldName === "MANUFACTURER"
-        );
-      model = jsonData.response[0].sections[2].subSections[4].fields.find(
-        (field) => field.fieldName === "MODEL"
+    // if (
+    //   jsonData.response[0].sections[2]?.subSections?.[4] &&
+    //   jsonData.response[0].sections[2].subSections[0]
+    // ) {
+    //   // Code to execute when manufacturer is found
+    //   manufacturer =
+    //     jsonData.response[0].sections[2]?.subSections?.[4]?.fields.find(
+    //       (field) => field.fieldName === "MANUFACTURER"
+    //     );
+    //   model = jsonData.response[0].sections[2].subSections[4].fields.find(
+    //     (field) => field.fieldName === "MODEL"
+    //   );
+    //   macAddress = jsonData.response[0].sections[2].subSections[0].fields.find(
+    //     (field) => field.fieldName === "DEVICE_MAC_ADDRESS"
+    //   );
+    // }
+
+    // improvement found on https://chat.openai.com/c/84ec5ae7-d1fe-459f-8cd1-a4b9e52d2c6f
+    const { sections } = jsonData.response[0];
+    const opt1 = sections[2]?.subSections.find(
+      (item) => item.sectionName === "CPE Information"
+    );
+    const opt2 = sections
+      .find((section) => section?.sectionName === "Service Configuration")
+      ?.subSections.find((sub) => sub.sectionName === "CPE Information");
+
+    const cpe = opt1 || opt2;
+
+    const networkSection = sections
+      .find((section) => section.sectionName === "Service Configuration")
+      ?.subSections.find(
+        (section) => section.sectionName === "Network Information"
       );
-      macAddress = jsonData.response[0].sections[2].subSections[0].fields.find(
-        (field) => field.fieldName === "DEVICE_MAC_ADDRESS"
+
+    const field = networkSection?.fields.find(
+      (field) => field.fieldName === "DEVICE_MAC_ADDRESS"
+    );
+
+    if (cpe) {
+      manufacturer = cpe.fields.find(
+        (field) => field.fieldName === "MANUFACTURER"
       );
+      model = cpe.fields.find((field) => field.fieldName === "MODEL");
+      macAddress = field;
     }
+
     // Billing Account/Circuit id
     const cktID = jsonData.response[0].sections[0].fields.find(
       (field) => field.fieldName === "Billing_Account_Number"
@@ -189,11 +221,38 @@ function Spectrum() {
       ?.fields.find((field) => field.fieldName === gatewayIp);
 
     // IP RANGE
-    const ipRange = baseKey?.subSections
-      .find((section) => section.sectionName === lanIpInfo)
-      ?.fields.find((field) => field.fieldName === ipAddress).value;
+    // const ipRange = baseKey?.subSections
+    //   .find((section) => section.sectionName === lanIpInfo)
+    //   // ?.fields.find((field) => field.fieldName === ipAddress).value;
+    //   ?.fields.find((field) =>
+    //     ["LAN_IP_ADDRESS_RANGE", "IP_ADDRESS"].includes(field.fieldName)
+    //   ).value;
 
-    const rangeParts = ipRange ? ipRange.split(" - ") : [];
+    let ipRange;
+    const section = baseKey?.subSections.find(
+      (section) => section.sectionName === lanIpInfo
+    );
+
+    if (section) {
+      const r1 = section.fields.find(
+        (field) => field.fieldName === "IP_ADDRESS"
+      )?.value;
+      const r2 = section.fields.find(
+        (field) => field.fieldName === "LAN_IP_ADDRESS_RANGE"
+      )?.value;
+      ipRange = r1 || r2;
+    }
+
+    // const rangeParts = ipRange
+    //   ? ipRange.split(" - ") || ipRange.split(" TO ")
+    //   : [];
+    // const rangeParts = ipRange ? ipRange.split(" - ").split(" TO ") : [];
+    const rangeParts = ipRange
+      ? ipRange.includes(" - ")
+        ? ipRange.split(" - ")
+        : ipRange.split(" TO ")
+      : [];
+
     const firstUsable = rangeParts[0] || null;
     const lastUsable = rangeParts[1] || null;
 
