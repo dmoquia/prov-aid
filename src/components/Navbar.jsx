@@ -42,6 +42,9 @@ function Navbar() {
           </a>
           <ul className="right hide-on-med-and-down">
             <li>
+              <Link to="/domain-remover">Domain Remover</Link>
+            </li>
+            <li>
               <Link to="/comcast">Comcast</Link>
             </li>
             <li>

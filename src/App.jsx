@@ -7,6 +7,7 @@ import Att from "./pages/Att";
 import Spectrum from "./pages/Spectrum";
 import AttASE from "./pages/AttAse";
 import AttDIA from "./pages/AttDIA";
+import DomainRemover from "./pages/DomainRemover"
 // import Footer from "./components/Footer";
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/domain-remover" element={<DomainRemover />} />
         <Route path="/comcast" element={<Comcast />} />
         <Route path="/att" element={<Att />} />
         <Route path="/attase" element={<AttASE />} />
