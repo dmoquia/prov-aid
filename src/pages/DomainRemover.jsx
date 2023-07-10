@@ -173,7 +173,7 @@
 import  { useState } from 'react';
 
 const modifyEmails = (emailString) => {
-  const emailRegex = /([\w.-]+)@([\w.-]+)/g || /From:[^@]+@fusionconnect\.com[\s\S]*?\n(Mobile|phone):\s*([\+0-9\s]+)/g;
+  const emailRegex = /([\w.-]+)@([\w.-]+)/g;
 
   const modifiedString = emailString.replace(emailRegex, (match, p1, p2) => {
     if (p2 === 'fusionconnect.com') {
