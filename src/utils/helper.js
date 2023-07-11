@@ -1,5 +1,6 @@
 
 
+
 export function processEmailString(emailString) {
   const lines = emailString.split("\n");
   let result = "";

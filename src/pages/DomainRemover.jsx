@@ -1,5 +1,4 @@
 
-
 import  { useState } from 'react';
 import {processEmailString} from '../utils/helper'
 const modifyEmails = (emailString) => {
@@ -42,7 +41,8 @@ const EmailComponent = () => {
 
   return (
     <div style={{width:"800px", margin:"20px auto"}}>
-      <textarea value={inputText} onChange={handleInputChange} rows={10} cols={50} />
+      <em>this app trims email from sender who is not from fusionconnect and remove phone#</em>
+      <textarea value={inputText} onChange={handleInputChange} rows={10} cols={50} placeholder='Paste your copied email thread here'  style={{ fontSize: "20px" }}/>
       <button onClick={handleCopyClick} className='btn'>Copy </button>
       <pre>{modifiedString}</pre>
     </div>
